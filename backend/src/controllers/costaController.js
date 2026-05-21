@@ -26,6 +26,7 @@ function normalizeRow(row) {
   const conta = row.CD_REG_FAT ?? row.cd_reg_fat ?? "-";
   const paciente = row.NM_PACIENTE ?? row.nm_paciente ?? "Paciente não localizado";
   const convenio = row.NM_CONVENIO ?? row.nm_convenio ?? "Convênio não localizado";
+  const cdConvenio = row.CD_CONVENIO ?? row.cd_convenio;
   const dtRecebimento = row.DT_RECEBIMENTO ?? row.dt_recebimento;
   const usuarioMv = row.NM_USUARIO_RECEBIMENTO ?? row.nm_usuario_recebimento;
   const setorOrigem = row.CD_SETOR ?? row.cd_setor;
@@ -37,6 +38,7 @@ function normalizeRow(row) {
     conta: String(conta ?? "-"),
     paciente,
     convenio,
+    cdConvenio: cdConvenio ? String(cdConvenio) : "-",
     entrada: formatDateTime(dtRecebimento),
     usuarioMv: usuarioMv || "-",
     setorOrigem: setorOrigem ? `Setor ${setorOrigem}` : "-",
@@ -64,7 +66,7 @@ function buildValidacoes() {
     {
       id: "tuss",
       titulo: "TUSS autorizado x TUSS MV",
-      descricao: "Conferência manual obrigatória: Conferido e correto ou Revalidar script.",
+      descricao: "Conferência obrigatória do código TUSS do item.",
       status: "Manual",
       tipo: "manual",
       horario: formatDateTime(new Date()),
@@ -99,6 +101,7 @@ WITH ultima_movimentacao AS (
         pd.cd_setor,
         pd.cd_setor_destino,
         a.tp_atendimento,
+        a.cd_convenio,
         a.dt_atendimento,
         p.nm_paciente,
         c.nm_convenio,
@@ -126,6 +129,7 @@ WITH ultima_movimentacao AS (
       ON rf.cd_atendimento = ipd.cd_atendimento
     WHERE ipd.cd_atendimento IS NOT NULL
       AND a.tp_atendimento = 'I'
+      AND NVL(a.cd_convenio, 0) <> 8
 )
 SELECT
     cd_atendimento,
@@ -136,6 +140,7 @@ SELECT
     cd_setor,
     cd_setor_destino,
     tp_atendimento,
+    cd_convenio,
     dt_atendimento,
     nm_paciente,
     nm_convenio,
@@ -152,9 +157,10 @@ function mockAtendimentos(login) {
     {
       id: 23610,
       atendimento: "23610",
-      conta: "-",
-      paciente: "ATENDIMENTO DE HOMOLOGAÇÃO",
-      convenio: "MV / MOVEDOC",
+      conta: "961",
+      paciente: "JOÃO CARLOS DA SILVA",
+      convenio: "UNIMED NORTE FLUMINENSE",
+      cdConvenio: "2",
       entrada: formatDateTime(new Date()),
       usuarioMv: login || "POLYANNA.FERNANDES",
       setorOrigem: "Última movimentação recebida",
