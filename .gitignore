@@ -1,0 +1,11 @@
+node_modules
+dist
+.env
+.env.local
+.env.production
+backend/database/*.sqlite
+backend/database/*.sqlite-shm
+backend/database/*.sqlite-wal
+.vscode
+.DS_Store
+npm-debug.log

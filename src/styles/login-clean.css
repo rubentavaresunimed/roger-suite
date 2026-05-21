@@ -1,0 +1,44 @@
+.login-clean-shell {
+  min-height: 620px;
+}
+
+.login-brand-clean {
+  display: grid;
+  place-items: center;
+  padding: 56px;
+}
+
+.login-logo-clean {
+  width: min(440px, 100%);
+  margin: 0;
+  z-index: 1;
+}
+
+.login-logo-clean .login-logo-img {
+  width: 100%;
+  filter:
+    drop-shadow(0 0 22px rgba(57, 230, 127, 0.16))
+    drop-shadow(0 20px 38px rgba(0, 0, 0, 0.44));
+}
+
+.login-brand-clean .network-glow {
+  right: -90px;
+  top: 120px;
+  opacity: 0.7;
+}
+
+@media (max-width: 1180px) {
+  .login-brand-clean {
+    min-height: 360px;
+  }
+}
+
+@media (max-width: 760px) {
+  .login-brand-clean {
+    padding: 36px 28px;
+  }
+
+  .login-logo-clean {
+    width: min(360px, 100%);
+  }
+}

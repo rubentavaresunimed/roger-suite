@@ -1,0 +1,27 @@
+CORREÇÃO DO ACESSO AO MV/ORACLE
+
+O erro NJS-116 não é erro da query do COSTA.
+Ele acontece porque o banco MV usa um tipo de senha/verificador que o node-oracledb em Thin Mode não consegue autenticar.
+Para esse banco, o backend precisa rodar em Thick Mode com Oracle Instant Client Basic.
+
+Opção mais simples:
+1. Instale ou copie o Oracle Instant Client Basic para:
+   C:\oracle\instantclient_21_13
+
+2. Dentro dessa pasta precisa existir o arquivo:
+   oci.dll
+
+3. O .env já está configurado com:
+   ORACLE_CLIENT_LIB_DIR=C:\oracle\instantclient_21_13
+   ORACLE_FORCE_THICK=true
+
+4. Rode:
+   npm install
+   npm run dev
+
+Se você já tiver Instant Client em outro caminho, altere ORACLE_CLIENT_LIB_DIR no arquivo .env da raiz e em backend/.env.
+
+Também funciona copiar a pasta do Instant Client para dentro do projeto com o nome:
+   C:\Sistemas\roger-suite\instantclient
+
+O código já procura automaticamente esses caminhos.
